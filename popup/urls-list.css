@@ -1,36 +1,29 @@
 html, body {
   width: 350px;
 }
-
 .panel {
   width: 100%;
 }
-
 .filterBox {
   padding-left: 6px;
   padding-top: 10px;
 }
-
 .sortButtons {
   float: right;
   padding-right: 6px;
 }
-
 .filterInput {
   width: 150px;
 }
-
 .filterInputError {
   background-color: #fbb;
 }
-
 .filterWarning {
   background-color: orange;
   text-align: center;
   padding-top: 3px;
   padding-bottom: 3px;
 }
-
 .urlText {
   height: 400px;
   margin-top: -1px;
@@ -38,46 +31,37 @@ html, body {
   white-space: pre;
   width: 100%;
 }
-
 .urlTextFilterMode {
   background-color: #ddd;
 }
-
 .buttonRow {
   padding: 5px;
   text-align: center;
   width: 100%;
 }
-
 .buttonRow > button {
   margin: 5px;
 }
-
 .hide {
   display: none;
 }
-
 @media (prefers-color-scheme: dark) {
   body {
     background-color: #42414D;
     color: #FFF;
   }
-
   input {
     background-color: #42414D;
     color: #FFF
   }
-
   textarea.browser-style {
     background-color: #42414D;
     color: #FFF
   }
-
   button.browser-style {
     background-color: #2B2A33;
     color: #FFF;
   }
-
   .urlTextFilterMode {
     background-color: #333 !important;
   }
