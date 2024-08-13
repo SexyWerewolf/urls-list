@@ -1,12 +1,12 @@
 {
   "manifest_version": 2,
   "name": "URLs List",
-  "version": "0.6.0",
-  "description": "List the URLs of all tabs from the current window as copyable plaintext.",
+  "version": "0.7.0",
+  "description": "A Firefox addon that lists URLs from all open tabs, allowing you to copy, filter, sort, and save them.",
   "homepage_url": "https://github.com/moritz-h/urls-list",
   "browser_specific_settings": {
     "gecko": {
-      "id": "{88664789-f91e-40e1-adb9-e4e9a8c48867}",
+      "id": "{f8714b18-6b53-476f-8964-628a5423a189}",
       "strict_min_version": "115.0"
     }
   },
