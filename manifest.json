@@ -3,7 +3,7 @@
   "name": "URLs List",
   "version": "0.7.0",
   "description": "A Firefox addon that lists URLs from all open tabs, allowing you to copy, filter, sort, and save them.",
-  "homepage_url": "https://github.com/moritz-h/urls-list",
+  "homepage_url": "https://github.com/SexyWerewolf/urls-list",
   "browser_specific_settings": {
     "gecko": {
       "id": "{f8714b18-6b53-476f-8964-628a5423a189}",
