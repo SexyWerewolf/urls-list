@@ -158,9 +158,9 @@ function resetFilter() {
 function closeTabs() {
   browser.tabs.query({currentWindow: true}).then((tabs) => {
     let urlsToClose = urlText.value.split('\n').map(url => url.trim()).filter(url => url !== '');
-    let tabsToClose = tabs.filter(tab => urlsToClose.includes(tab.url));
-    for (let tab of tabsToClose) {
-      browser.tabs.remove(tab.id);
+    let tabsToClose = tabs.filter(tab => urlsToClose.includes(tab.url)).map(tab => tab.id);
+    if (tabsToClose.length > 0) {
+      browser.tabs.remove(tabsToClose);
     }
   });
 }
@@ -170,6 +170,10 @@ document.addEventListener('DOMContentLoaded', () => {
     currentFilter = value;
     listTabs();
   });
+});
+let showStatsBtn = document.querySelector('.showStats');
+showStatsBtn.addEventListener('click', () => {
+  browser.tabs.create({ url: browser.runtime.getURL('popup/show-stats.html') });
 });
 resetBtn.addEventListener('click', listTabs);
 openBtn.addEventListener('click', open);

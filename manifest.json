@@ -1,8 +1,8 @@
 {
   "manifest_version": 2,
   "name": "URLs List",
-  "version": "0.9.0",
-  "description": "A Firefox addon that lists URLs from all open tabs, allowing you to copy, filter, sort, and save them.",
+  "version": "1.0.0",
+  "description": "A Firefox addon that lists URLs from all open tabs, allowing you to copy, filter, sort, save, and view statistics.",
   "homepage_url": "https://github.com/SexyWerewolf/urls-list",
   "browser_specific_settings": {
     "gecko": {
