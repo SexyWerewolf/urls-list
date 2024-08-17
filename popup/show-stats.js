@@ -2,25 +2,39 @@ document.addEventListener('DOMContentLoaded', () => {
   function fetchStats() {
     browser.runtime.sendMessage({action: 'getStats'}).then(response => {
       const statsContainer = document.getElementById('stats-container');
-      statsContainer.innerHTML = '';
+      statsContainer.innerHTML = ''; // Μπορεί να μείνει το ίδιο, καθώς εδώ αδειάζεις το περιεχόμενο
       for (const [domain, { count, subdomains }] of Object.entries(response.stats)) {
         const domainElement = document.createElement('div');
         domainElement.className = 'domain-item';
-        domainElement.innerHTML = `
-          <div class="domain-name" data-domain="${domain}">${domain}</div>
-          <div class="domain-count">${count} tabs</div>
-          <div class="urls-list" id="urls-${domain}" style="display: none;">
-            <ul>
-              <!-- Subdomains and URLs will be dynamically injected here -->
-            </ul>
-          </div>
-        `;
+
+        // Δημιουργία του περιεχομένου χωρίς χρήση innerHTML
+        const domainName = document.createElement('div');
+        domainName.className = 'domain-name';
+        domainName.setAttribute('data-domain', domain);
+        domainName.textContent = domain;
+
+        const domainCount = document.createElement('div');
+        domainCount.className = 'domain-count';
+        domainCount.textContent = `${count} tabs`;
+
+        const urlsList = document.createElement('div');
+        urlsList.className = 'urls-list';
+        urlsList.id = `urls-${domain}`;
+        urlsList.style.display = 'none';
+        const urlsUl = document.createElement('ul');
+        urlsList.appendChild(urlsUl);
+
+        domainElement.appendChild(domainName);
+        domainElement.appendChild(domainCount);
+        domainElement.appendChild(urlsList);
+
         statsContainer.appendChild(domainElement);
       }
     }).catch(error => {
       console.error('Error fetching stats:', error);
     });
   }
+
   function fetchUrls(domain) {
     browser.runtime.sendMessage({action: 'getUrlsByDomain', domain: domain}).then(response => {
       if (!response.subdomains) {
@@ -29,15 +43,27 @@ document.addEventListener('DOMContentLoaded', () => {
       }
       const urlsList = document.getElementById(`urls-${domain}`);
       const urlsUl = urlsList.querySelector('ul');
-      urlsUl.innerHTML = '';
+      urlsUl.innerHTML = ''; // Μπορεί να μείνει το ίδιο, καθώς εδώ αδειάζεις το περιεχόμενο
+
       for (const [hostname, urls] of Object.entries(response.subdomains)) {
         const subdomainElement = document.createElement('li');
-        subdomainElement.innerHTML = `
-          <div class="subdomain-name">${hostname}</div>
-          <ul>
-            ${urls.map(url => `<li class="url-item" data-url="${url}">${url}</li>`).join('')}
-          </ul>
-        `;
+
+        // Δημιουργία του περιεχομένου χωρίς χρήση innerHTML
+        const subdomainName = document.createElement('div');
+        subdomainName.className = 'subdomain-name';
+        subdomainName.textContent = hostname;
+
+        const urlList = document.createElement('ul');
+        urls.forEach(url => {
+          const urlItem = document.createElement('li');
+          urlItem.className = 'url-item';
+          urlItem.setAttribute('data-url', url);
+          urlItem.textContent = url;
+          urlList.appendChild(urlItem);
+        });
+
+        subdomainElement.appendChild(subdomainName);
+        subdomainElement.appendChild(urlList);
         urlsUl.appendChild(subdomainElement);
       }
       urlsList.style.display = 'block';
@@ -45,6 +71,7 @@ document.addEventListener('DOMContentLoaded', () => {
       console.error('Error fetching URLs:', error);
     });
   }
+
   document.getElementById('stats-container').addEventListener('click', event => {
     if (event.target.classList.contains('domain-name')) {
       const domain = event.target.getAttribute('data-domain');
@@ -65,6 +92,7 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     }
   });
+
   const searchInput = document.getElementById('search');
   searchInput.addEventListener('input', () => {
     const query = searchInput.value.toLowerCase();
@@ -74,6 +102,7 @@ document.addEventListener('DOMContentLoaded', () => {
       item.style.display = domainName.includes(query) ? '' : 'none';
     });
   });
+
   document.getElementById('save').addEventListener('click', () => {
     browser.runtime.sendMessage({action: 'getStats'}).then(response => {
       const dataStr = JSON.stringify(response.stats, null, 2);
@@ -88,8 +117,10 @@ document.addEventListener('DOMContentLoaded', () => {
       console.error('Error saving data:', error);
     });
   });
+
   document.getElementById('close').addEventListener('click', () => {
     window.close();
   });
+
   fetchStats();
 });
