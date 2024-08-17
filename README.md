@@ -1,6 +1,6 @@
 # URLs List Addon - Enhanced Version
 
-This repository is a fork of the original [URLs List addon](https://github.com/moritz-h/urls-list), which allows you to list the URLs of all open tabs in the current window as copyable plaintext. This enhanced version includes an additional feature that remembers and automatically applies the last used filter input across sessions.
+This repository is an improved fork of the original [URLs List addon](https://github.com/moritz-h/urls-list), designed to offer users an advanced way to manage and interact with the URLs of all open tabs in the current window. This enhanced version introduces several new features, including the ability to remember and automatically apply the last used filter input across sessions, as well as detailed tab statistics.
 
 ## Features
 
@@ -9,6 +9,7 @@ This repository is a fork of the original [URLs List addon](https://github.com/m
 - **Sort URLs:** Sort URLs alphabetically in ascending or descending order.
 - **Open URLs:** Open URLs from the list that aren't already open in your browser.
 - **Save URLs:** Save the list of URLs to a file for later use.
+- **Tab Statistics:** View detailed statistics for tabs, including breakdowns by domain and subdomain.
 
 ## Filter Usage Examples
 
@@ -33,6 +34,11 @@ The filter allows you to include or exclude specific URLs based on patterns. Her
 ### 5. Filtering by Path
    - **Filter:** `example.com/page`
    - **Result:** Displays all URLs with `example.com` in the domain and `/page` in the path, such as `http://1.example.com/page` or `https://2.example.com/page`.
+
+## Tab Statistics
+
+- **Tab Statistics Page:** Added a new page to display statistics for tabs, including a breakdown of domains and subdomains.
+- **Domain and Subdomain Statistics:** Implemented a detailed view of tab counts by domain and subdomain, with options to expand and view URLs associated with each domain.
 
 ## Installation
 
