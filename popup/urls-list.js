@@ -5,12 +5,15 @@ let saveBtn = document.querySelector('.save');
 let sortAscBtn = document.querySelector('.sortAsc');
 let sortDescBtn = document.querySelector('.sortDesc');
 let resetFilterBtn = document.querySelector('.resetFilter');
+let closeTabsBtn = document.querySelector('.closeTabs');
 let urlText = document.querySelector('.urlText');
 let filterInput = document.querySelector('.filterInput');
 let filterWarning = document.querySelector('.filterWarning');
 let alwaysOpenAllTabs = false;
 let filterBackup = '';
 let filterMode = false;
+let previousUrls = '';
+let currentFilter = '';
 function saveFilterValue(value) {
   browser.storage.sync.set({ filterInputValue: value });
 }
@@ -19,18 +22,48 @@ function restoreFilterValue() {
     return ('filterInputValue' in settings) ? settings.filterInputValue : '';
   });
 }
+function applyFilter() {
+  let val = filterInput.value;
+  filterInput.classList.remove("filterInputError");
+  currentFilter = val;
+  if (val !== '') {
+    enableFilterMode();
+    try {
+      let re;
+      if (val.startsWith('!')) {
+        re = new RegExp(`^(?!.*(${val.slice(1)})).*$`, 'i');
+      } else {
+        re = new RegExp(val, 'i');
+      }
+      let urls = filterBackup.split('\n');
+      let filteredUrls = [];
+      for (let i in urls) {
+        let clean = urls[i].trim();
+        if (clean !== '' && re.test(clean)) {
+          filteredUrls.push(clean);
+        }
+      }
+      urlText.value = filteredUrls.join('\n') + '\n';
+    } catch (ex) {
+      filterInput.classList.add("filterInputError");
+    }
+  } else {
+    disableFilterMode();
+  }
+  saveFilterValue(val);
+}
 function listTabs() {
-  disableFilterMode();
   browser.tabs.query({currentWindow: true}).then((tabs) => {
     let urls = '';
     for (let tab of tabs) {
       urls += tab.url + '\n';
     }
-    urlText.value = urls;
-    restoreFilterValue().then(value => {
-      filterInput.value = value;
-      filter();
-    });
+    if (urls !== previousUrls) {
+      previousUrls = urls;
+      filterBackup = urls;
+      urlText.value = urls;
+      applyFilter();
+    }
   });
 }
 function open() {
@@ -119,34 +152,25 @@ function disableFilterMode() {
     filterMode = false;
   }
 }
-function filter(e) {
-  let val = e ? e.target.value : filterInput.value;
-  filterInput.classList.remove("filterInputError");
-  if (val !== '') {
-    enableFilterMode();
-    try {
-      let re = new RegExp(val, 'i');
-      let urls = filterBackup.split('\n');
-      let filteredUrls = [];
-      for (let i in urls) {
-        let clean = urls[i].trim();
-        if (clean !== '' && re.test(clean)) {
-          filteredUrls.push(clean);
-        }
-      }
-      urlText.value = filteredUrls.join('\n') + '\n';
-    } catch (ex) {
-      filterInput.classList.add("filterInputError");
-    }
-  } else {
-    disableFilterMode();
-  }
-  saveFilterValue(val);
-}
 function resetFilter() {
   disableFilterMode();
 }
-document.addEventListener('DOMContentLoaded', listTabs);
+function closeTabs() {
+  browser.tabs.query({currentWindow: true}).then((tabs) => {
+    let urlsToClose = urlText.value.split('\n').map(url => url.trim()).filter(url => url !== '');
+    let tabsToClose = tabs.filter(tab => urlsToClose.includes(tab.url));
+    for (let tab of tabsToClose) {
+      browser.tabs.remove(tab.id);
+    }
+  });
+}
+document.addEventListener('DOMContentLoaded', () => {
+  restoreFilterValue().then(value => {
+    filterInput.value = value;
+    currentFilter = value;
+    listTabs();
+  });
+});
 resetBtn.addEventListener('click', listTabs);
 openBtn.addEventListener('click', open);
 copyBtn.addEventListener('click', copy);
@@ -154,4 +178,6 @@ saveBtn.addEventListener('click', save);
 sortAscBtn.addEventListener('click', sortAsc);
 sortDescBtn.addEventListener('click', sortDesc);
 resetFilterBtn.addEventListener('click', resetFilter);
-filterInput.addEventListener('input', filter);
+filterInput.addEventListener('input', applyFilter);
+closeTabsBtn.addEventListener('click', closeTabs);
+setInterval(listTabs, 1000);
