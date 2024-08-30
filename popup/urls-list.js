@@ -6,6 +6,7 @@ let sortAscBtn = document.querySelector('.sortAsc');
 let sortDescBtn = document.querySelector('.sortDesc');
 let resetFilterBtn = document.querySelector('.resetFilter');
 let closeTabsBtn = document.querySelector('.closeTabs');
+let closeDuplicatesBtn = document.querySelector('.closeDuplicates');
 let urlText = document.querySelector('.urlText');
 let filterInput = document.querySelector('.filterInput');
 let filterWarning = document.querySelector('.filterWarning');
@@ -164,6 +165,25 @@ function closeTabs() {
     }
   });
 }
+function closeDuplicates() {
+  browser.tabs.query({currentWindow: true}).then((tabs) => {
+    let urlMap = {};
+    let duplicateTabs = [];
+
+    tabs.forEach(tab => {
+      let normalizedUrl = tab.url.split('#')[0].split('?')[0];
+      if (urlMap[normalizedUrl]) {
+        duplicateTabs.push(tab.id);
+      } else {
+        urlMap[normalizedUrl] = true;
+      }
+    });
+
+    if (duplicateTabs.length > 0) {
+      browser.tabs.remove(duplicateTabs);
+    }
+  });
+}
 document.addEventListener('DOMContentLoaded', () => {
   restoreFilterValue().then(value => {
     filterInput.value = value;
@@ -184,4 +204,5 @@ sortDescBtn.addEventListener('click', sortDesc);
 resetFilterBtn.addEventListener('click', resetFilter);
 filterInput.addEventListener('input', applyFilter);
 closeTabsBtn.addEventListener('click', closeTabs);
+closeDuplicatesBtn.addEventListener('click', closeDuplicates);
 setInterval(listTabs, 1000);

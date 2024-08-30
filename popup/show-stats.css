@@ -20,6 +20,7 @@ header {
 }
 h1 {
   margin: 0;
+  font-size: 24px;
 }
 #search {
   padding: 5px;
@@ -34,17 +35,41 @@ main {
 #stats-container {
   margin-bottom: 20px;
 }
+.section-title {
+  font-size: 18px;
+  font-weight: bold;
+  margin: 20px 0 10px;
+  border-bottom: 2px solid #444;
+  padding-bottom: 5px;
+  color: #00bfff;
+}
 .domain-item {
   border-bottom: 1px solid #444;
   padding: 10px 0;
 }
+.domain-item:last-child {
+  border-bottom: none;
+}
 .domain-name {
   cursor: pointer;
   font-weight: bold;
+  color: #00bfff;
+  font-size: 16px;
+}
+.domain-name:hover {
+  text-decoration: underline;
 }
 .urls-list {
-  display: none;
   margin-top: 10px;
+}
+.url-item {
+  cursor: pointer;
+  color: #007bff;
+  text-decoration: underline;
+  margin-bottom: 5px;
+}
+.url-item:hover {
+  color: #0056b3;
 }
 footer {
   display: flex;
@@ -63,12 +88,6 @@ button {
 button:hover {
   background-color: #005f8d;
 }
-.url-item {
-  cursor: pointer;
-  color: #007bff;
-  text-decoration: underline;
-}
-.url-item:hover {
-  color: #0056b3;
-  text-decoration: underline;
+.hidden {
+  display: none;
 }
