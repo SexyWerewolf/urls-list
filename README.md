@@ -10,6 +10,7 @@ This repository is an improved fork of the original [URLs List addon](https://gi
 - **Open URLs:** Open URLs from the list that aren't already open in your browser.
 - **Save URLs:** Save the list of URLs to a file for later use.
 - **Tab Statistics:** View detailed statistics for tabs, including breakdowns by domain and subdomain.
+- **Close Duplicate Domains:** Manually remove duplicate domain entries using the "Close duplicate" button.
 
 ## Filter Usage Examples
 
